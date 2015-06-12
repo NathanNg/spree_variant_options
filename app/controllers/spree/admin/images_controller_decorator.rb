@@ -41,10 +41,17 @@ Spree::Admin::ImagesController.class_eval do
   private
 
   def create_image(variant, image_attributes)
-    image = Spree::Image.new(permitted_resource_params)
+    attachment = params[:image][:attachment]
+  image = Spree::Image.new(permitted_resource_params)
+
+    if attachment.blank?
+      image.attachment = @image.attachment
+    end
+
     image.viewable_type = 'Spree::Variant'
     image.viewable_id = variant.id
     variant.images << image
     variant.save
+
   end
 end
